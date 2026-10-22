@@ -34,6 +34,7 @@ const orderSchema = new Schema(
       enum: ["UNPAID", "PAID", "REFUNDED"],
       default: "UNPAID",
     },
+    paymentMethod: { type: String, enum: ["COD", "MOCK_ONLINE"], default: "COD" },
   },
   { timestamps: true },
 );

@@ -4,7 +4,8 @@
   "description": "RESTFul API Application - Fruit Fresh Commerce Platform",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "nodejs",

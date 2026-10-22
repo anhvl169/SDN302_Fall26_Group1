@@ -1,0 +1,11 @@
+const express = require('express');
+const c = require('../controllers/order');
+const { auth, roles } = require('../middleware/auth');
+const wrap = require('../middleware/async');
+const router = express.Router();
+router.post('/orders/checkout', auth, roles('CUSTOMER'), wrap(c.checkout));
+router.get('/orders', auth, wrap(c.listOrders));
+router.get('/orders/:id', auth, wrap(c.getOrder));
+router.patch('/orders/:id/status', auth, wrap(c.updateStatus));
+router.post('/orders/:id/pay-simulate', auth, roles('CUSTOMER'), wrap(c.simulatePayment));
+module.exports = router;

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Chọn trái cây tươi từ các cửa hàng và đặt hàng trực tuyến." />
+    <meta name="theme-color" content="#f5f5ef" />
+    <title>Vườn Mùa — Trái cây tươi mỗi ngày</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+    <script src="/customer.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Vườn Mùa, trang chủ">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M16 26.5c-5.6 0-9.4-3.7-9.4-9.1 0-5.2 3.8-9 9.4-9s9.4 3.8 9.4 9c0 5.4-3.8 9.1-9.4 9.1Z" fill="currentColor" />
+              <path d="M16.1 8.6c-.1-3 1.4-5.2 4.6-6.2-.1 3.1-1.7 5.3-4.6 6.2Z" fill="#d9a34c" />
+              <path d="M16 24.2c-.3-5 1.2-8.7 4.4-11.3M15.9 19.4c-1.1-2.1-2.6-3.6-4.8-4.6" stroke="#f5f5ef" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="brand-copy"><strong>vườn mùa</strong><small>fruit commerce</small></span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Điều hướng chính" role="tablist">
+          <button class="nav-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="products-view" id="products-tab" data-view="products">
+            <span class="nav-index">01</span> Cửa hàng
+          </button>
+          <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="categories-view" id="categories-tab" data-view="categories" hidden>
+            <span class="nav-index">02</span> Quản lý danh mục
+          </button>
+        </nav>
+
+        <div class="account-actions"><button class="account-trigger" id="account-label" type="button">Đăng nhập / Đăng ký</button>
+        <button class="button button-text cart-trigger" id="cart-trigger" type="button" hidden>Giỏ hàng <span class="cart-count" id="cart-count">0</span></button>
+        <button class="button button-text account-logout" id="account-logout" type="button" hidden>Đăng xuất</button></div>
+        <div class="connection" id="connection-status" data-state="loading" aria-live="polite">
+          <span class="connection-dot" aria-hidden="true"></span>
+          <span id="connection-label">Đang kết nối</span>
+        </div>
+      </header>
+
+      <dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title">
+        <div class="auth-card">
+          <button class="auth-close" id="auth-close" type="button" aria-label="Đóng">×</button>
+          <p class="eyebrow"><span class="eyebrow-line"></span> Vườn Mùa · Tài khoản</p>
+          <h2 id="auth-title">Chào mừng bạn trở lại</h2>
+          <p class="auth-intro" id="auth-intro">Đăng nhập để tiếp tục mua sắm và theo dõi đơn hàng.</p>
+          <div class="auth-switch" role="tablist" aria-label="Chọn đăng nhập hoặc đăng ký">
+            <button class="is-active" id="login-mode" type="button" role="tab" aria-selected="true">Đăng nhập</button>
+            <button id="register-mode" type="button" role="tab" aria-selected="false">Tạo tài khoản</button>
+          </div>
+          <form id="account-form">
+            <label class="auth-field" id="name-row" hidden><span>Họ và tên</span><input id="account-name" name="fullName" type="text" autocomplete="name" maxlength="100" /></label>
+            <label class="auth-field"><span>Email</span><input id="account-email" name="email" type="email" required autocomplete="email" placeholder="ban@example.com" /></label>
+            <label class="auth-field"><span>Mật khẩu</span><input id="account-password" name="password" type="password" required autocomplete="current-password" placeholder="Nhập mật khẩu" /></label>
+            <p class="auth-hint" id="auth-hint">Dùng email và mật khẩu đã đăng ký.</p>
+            <p class="auth-message" id="auth-message" aria-live="polite"></p>
+            <button class="button button-primary auth-submit" id="account-submit" type="submit">Đăng nhập</button>
+          </form>
+          <p class="auth-footnote">Tạo tài khoản mới sẽ bắt đầu với vai trò khách hàng.</p>
+        </div>
+      </dialog>
+
+      <main id="main-content">
+        <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+
+        <section class="view" id="categories-view" role="tabpanel" aria-labelledby="categories-tab" hidden>
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-line"></span> Quản trị cửa hàng</p>
+              <h1>Danh mục <em>theo mùa.</em></h1>
+              <p class="intro-copy">Sắp xếp sản phẩm theo nhóm, theo dõi trạng thái và giữ gian hàng luôn dễ tìm.</p>
+            </div>
+            <div class="date-note"><span class="date-mark">✳</span><span>Không gian quản lý<br /><strong>Fruit Fresh Commerce</strong></span></div>
+          </div>
+
+          <div class="metric-strip" aria-label="Tổng quan danh mục">
+            <div class="metric"><span class="metric-label">Tất cả danh mục</span><strong id="metric-total">—</strong><span class="metric-note">đang được quản lý</span></div>
+            <div class="metric"><span class="metric-label">Đang hoạt động</span><strong id="metric-active">—</strong><span class="metric-note">có thể hiển thị</span></div>
+            <div class="metric"><span class="metric-label">Sản phẩm</span><strong id="metric-products">—</strong><span class="metric-note">trên toàn hệ thống</span></div>
+            <div class="metric metric-accent"><span class="metric-label">Gợi ý</span><strong class="metric-word">Gọn nhóm,<br />dễ chọn</strong><span class="metric-note">mỗi shop có bộ danh mục riêng</span></div>
+          </div>
+
+          <div class="section-heading">
+            <div><p class="eyebrow">01 / Danh mục cửa hàng</p><h2>Danh sách & chỉnh sửa</h2></div>
+            <button class="button button-primary" id="new-category" type="button"><span class="button-plus" aria-hidden="true">＋</span> Thêm danh mục</button>
+          </div>
+
+          <div class="category-workspace">
+            <section class="list-panel" aria-labelledby="category-list-title">
+              <div class="panel-topline">
+                <div><h3 id="category-list-title">Danh mục hiện có</h3><p id="category-count">Đang tải dữ liệu…</p></div>
+                <button class="icon-button" id="refresh-data" type="button" aria-label="Tải lại dữ liệu" title="Tải lại dữ liệu">
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.2 7.5A6.5 6.5 0 1 0 16.4 11M16.2 3.8v3.9h-3.9" /></svg>
+                </button>
+              </div>
+              <div class="filter-row">
+                <label class="search-box"><span class="sr-only">Tìm danh mục</span><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.8"/><path d="m13 13 4 4"/></svg><input id="category-search" type="search" placeholder="Tìm tên danh mục…" autocomplete="off" /></label>
+                <label class="select-box"><span class="sr-only">Lọc theo shop</span><select id="shop-filter"><option value="">Tất cả shop</option></select></label>
+                <label class="select-box status-filter"><span class="sr-only">Lọc trạng thái</span><select id="status-filter"><option value="">Mọi trạng thái</option><option value="ACTIVE">Đang hoạt động</option><option value="INACTIVE">Đã ẩn</option></select></label>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Danh mục</th><th>Shop</th><th>Sản phẩm</th><th>Trạng thái</th><th><span class="sr-only">Thao tác</span></th></tr></thead>
+                  <tbody id="category-rows"><tr><td class="table-loading" colspan="5">Đang lấy danh mục…</td></tr></tbody>
+                </table>
+              </div>
+              <div class="list-footer"><span id="list-summary">—</span><span class="table-hint">Chọn sửa để cập nhật thông tin</span></div>
+            </section>
+
+            <aside class="form-panel" aria-labelledby="form-title">
+              <div class="form-panel-heading">
+                <p class="eyebrow" id="form-kicker">Tạo mới</p>
+                <h3 id="form-title">Thêm danh mục</h3>
+                <p>Gán danh mục vào đúng shop để sản phẩm được phân loại chính xác.</p>
+              </div>
+              <form id="category-form" novalidate>
+                <label class="field-label" for="form-shop">Shop sở hữu <span>*</span></label>
+                <input class="field-control" id="form-shop" name="shopId" list="shop-options" placeholder="Chọn hoặc nhập Shop ID" required />
+                <datalist id="shop-options"></datalist>
+                <label class="field-label" for="form-name">Tên danh mục <span>*</span></label>
+                <input class="field-control" id="form-name" name="categoryName" type="text" maxlength="100" placeholder="Ví dụ: Trái cây nhiệt đới" required />
+                <label class="field-label" for="form-description">Mô tả</label>
+                <textarea class="field-control field-textarea" id="form-description" name="description" rows="3" maxlength="500" placeholder="Mô tả ngắn về nhóm sản phẩm"></textarea>
+                <label class="field-label" for="form-status">Trạng thái</label>
+                <select class="field-control" id="form-status" name="status"><option value="ACTIVE">Đang hoạt động</option><option value="INACTIVE">Ẩn khỏi cửa hàng</option></select>
+                <p class="form-message" id="form-message" aria-live="polite"></p>
+                <div class="form-actions"><button class="button button-primary button-save" type="submit" id="save-category">Lưu danh mục <span aria-hidden="true">↗</span></button><button class="button button-text" type="button" id="cancel-edit" hidden>Hủy chỉnh sửa</button></div>
+              </form>
+              <div class="form-footnote"><span aria-hidden="true">ⓘ</span> Tên danh mục cần khác nhau trong cùng một shop.</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view is-visible" id="products-view" role="tabpanel" aria-labelledby="products-tab">
+          <div class="page-intro product-intro">
+            <div><p class="eyebrow"><span class="eyebrow-line"></span> Trái cây từ cửa hàng địa phương</p><h1>Chọn vị tươi <em>mỗi ngày.</em></h1><p class="intro-copy">Khám phá trái cây theo mùa, xem giá và lượng hàng còn lại. Thêm món bạn thích vào giỏ; đăng nhập khi bắt đầu mua.</p></div>
+            <div class="product-total"><strong id="product-view-total">—</strong><span>mặt hàng</span></div>
+          </div>
+          <div class="product-toolbar">
+            <label class="search-box"><span class="sr-only">Tìm sản phẩm</span><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.8"/><path d="m13 13 4 4"/></svg><input id="product-search" type="search" placeholder="Tìm tên sản phẩm…" autocomplete="off" /></label>
+            <label class="select-box"><span class="sr-only">Lọc category</span><select id="product-category-filter"><option value="">Tất cả danh mục</option></select></label>
+            <label class="select-box"><span class="sr-only">Lọc shop</span><select id="product-shop-filter"><option value="">Tất cả shop</option></select></label>
+          </div>
+          <div class="product-grid" id="product-grid"><div class="product-loading">Đang tải sản phẩm…</div></div>
+          <section class="customer-panel" id="customer-panel" hidden><div class="section-heading"><div><p class="eyebrow">Tài khoản</p><h2>Giỏ hàng và đơn hàng</h2></div><button class="button button-text" id="refresh-customer" type="button">Làm mới</button></div><div class="customer-columns"><section><h3>Giỏ hàng</h3><div id="cart-content"></div><form id="checkout-form"><label>Địa chỉ giao hàng<input id="shipping-address" required maxlength="300" /></label><label>Thanh toán<select id="payment-method"><option value="COD">COD khi nhận</option><option value="MOCK_ONLINE">Online giả lập</option></select></label><button class="button button-primary">Đặt hàng</button></form><details class="shop-request"><summary>Đăng ký mở shop</summary><form id="shop-request-form"><label>Tên shop<input id="request-shop-name" required maxlength="120" /></label><label>Mô tả<textarea id="request-shop-description" rows="3" maxlength="500"></textarea></label><button class="button button-primary">Gửi yêu cầu duyệt</button></form></details></section><section><h3>Đơn hàng</h3><div id="orders-content"></div></section></div></section>
+        </section>
+      </main>
+
+      <footer class="site-footer"><span>Vườn Mùa <span class="footer-dot">·</span> Fruit Fresh Commerce</span><span>Quản lý rõ ràng, chọn mùa tươi ngon.</span></footer>
+    </div>
+  </body>
+</html>

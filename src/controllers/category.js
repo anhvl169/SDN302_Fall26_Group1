@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Category = require('../models/category');
 const Shop = require('../models/shop');
 const Product = require('../models/product');
+const { canManageShop } = require('../middleware/auth');
 
 const allowedStatuses = ['ACTIVE', 'INACTIVE'];
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -93,6 +94,7 @@ const createCategory = asyncHandler(async (req, res) => {
   }
 
   const shop = await Shop.findById(shopId);
+  if (shop && !(await canManageShop(req.user, shopId, ['INVENTORY_STAFF']))) return sendError(res, 403, 'You cannot manage categories for this shop.');
   if (!shop) return sendError(res, 404, 'Không tìm thấy shop.');
 
   const category = await Category.create({ shopId, categoryName: categoryName.trim(), description, status });
@@ -119,6 +121,9 @@ const updateCategory = asyncHandler(async (req, res) => {
     return sendError(res, 400, 'Cần gửi ít nhất một trường được hỗ trợ để cập nhật.');
   }
 
+  const existing = await Category.findById(req.params.id);
+  if (!existing) return sendError(res, 404, 'Category not found.');
+  if (!(await canManageShop(req.user, existing.shopId, ['INVENTORY_STAFF']))) return sendError(res, 403, 'You cannot manage categories for this shop.');
   const category = await Category.findByIdAndUpdate(req.params.id, updates, {
     new: true,
     runValidators: true,
@@ -130,6 +135,7 @@ const updateCategory = asyncHandler(async (req, res) => {
 const deleteCategory = asyncHandler(async (req, res) => {
   if (!validId(req.params.id)) return sendError(res, 400, 'category id không hợp lệ.');
   const category = await Category.findById(req.params.id);
+  if (category && !(await canManageShop(req.user, category.shopId, ['INVENTORY_STAFF']))) return sendError(res, 403, 'You cannot manage categories for this shop.');
   if (!category) return sendError(res, 404, 'Không tìm thấy category.');
 
   if (await Product.exists({ categoryId: category._id })) {

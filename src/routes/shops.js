@@ -1,0 +1,12 @@
+const express = require('express');
+const c = require('../controllers/shop');
+const { auth, roles } = require('../middleware/auth');
+const wrap = require('../middleware/async');
+const router = express.Router();
+router.get('/shops', wrap(c.listShops));
+router.get('/shops/:id', wrap(c.getShop));
+router.post('/shop-requests', auth, wrap(c.createRequest));
+router.get('/shop-requests', auth, wrap(c.listRequests));
+router.patch('/shop-requests/:id/review', auth, roles('ADMIN'), wrap(c.reviewRequest));
+router.patch('/shops/:id', auth, wrap(c.updateShop));
+module.exports = router;

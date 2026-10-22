@@ -1,0 +1,11 @@
+const express = require('express');
+const c = require('../controllers/auth');
+const { auth, roles } = require('../middleware/auth');
+const wrap = require('../middleware/async');
+const router = express.Router();
+router.post('/auth/register', wrap(c.register));
+router.post('/auth/login', wrap(c.login));
+router.get('/auth/me', auth, wrap(c.me));
+router.get('/users', auth, roles('ADMIN'), wrap(c.listUsers));
+router.patch('/users/:id', auth, roles('ADMIN'), wrap(c.updateUser));
+module.exports = router;
