@@ -1,4 +1,4 @@
-const Shop = require("../../models/shop.model.js");
+const Shop = require("./shop.model.js");
 const AppError = require("../../common/errors/AppError.js");
 const { assertObjectId } = require("../../common/utils/query.js");
 const { getActiveCategories } = require("../categories/category.service.js");

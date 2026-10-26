@@ -1,4 +1,4 @@
-const Order = require("../../models/order.model.js");
+const Order = require("../orders/order.model.js");
 const AppError = require("../../common/errors/AppError.js");
 
 const TIMEZONE = "Asia/Ho_Chi_Minh";

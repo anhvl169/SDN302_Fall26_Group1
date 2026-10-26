@@ -1,6 +1,6 @@
 // Bản tạm cho các luồng chạy được, Luồng 1 (UC05) sẽ hoàn thiện.
-const Shop = require("../../models/shop.model.js");
-const ShopStaff = require("../../models/shopStaff.model.js");
+const Shop = require("../../modules/shops/shop.model.js");
+const ShopStaff = require("../../modules/shops/shopStaff.model.js");
 const AppError = require("../errors/AppError.js");
 
 const SHOP_ROLES = ["SHOP_OWNER", "INVENTORY_STAFF", "ORDER_STAFF"];

@@ -1,4 +1,4 @@
-const Category = require("../../models/category.model.js");
+const Category = require("./category.model.js");
 const AppError = require("../../common/errors/AppError.js");
 const { escapeRegex, assertObjectId } = require("../../common/utils/query.js");
 

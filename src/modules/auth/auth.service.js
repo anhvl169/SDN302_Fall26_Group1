@@ -1,7 +1,7 @@
 // Bản tạm để test API, Luồng 1 (UC02) sẽ thay bằng bản chính thức.
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../../models/user.model.js");
+const User = require("../users/user.model.js");
 const AppError = require("../../common/errors/AppError.js");
 
 const publicUser = (user) => ({

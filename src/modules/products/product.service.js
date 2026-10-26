@@ -1,6 +1,6 @@
-const Product = require("../../models/product.model.js");
-const Category = require("../../models/category.model.js");
-const Shop = require("../../models/shop.model.js");
+const Product = require("./product.model.js");
+const Category = require("../categories/category.model.js");
+const Shop = require("../shops/shop.model.js");
 const categoryService = require("../categories/category.service.js");
 const AppError = require("../../common/errors/AppError.js");
 const {
