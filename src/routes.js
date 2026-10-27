@@ -18,5 +18,4 @@ router.use(productRouter);
 router.use(myshopProductRouter);
 router.use(shopRouter);
 router.use(shopStatsRouter);
-
 module.exports = router;
