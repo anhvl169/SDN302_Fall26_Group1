@@ -4,6 +4,23 @@ const { assertObjectId } = require("../../common/utils/query.js");
 const { getActiveCategories } = require("../categories/category.service.js");
 const { VISIBLE_SHOP } = require("../products/product.service.js");
 
+const User = require("../users/user.model.js");
+const Order = require("../orders/order.model.js");
+const Notification = require("../notifications/notification.model.js");
+
+const ShopRegistrationRequest = require("./shopRegistrationRequest.model.js");
+const ShopStaff = require("./shopStaff.model.js");
+
+const REQUEST_STATUSES = ["PENDING", "APPROVED", "REJECTED"];
+const APPROVAL_STATUSES = [
+  "PENDING",
+  "APPROVED",
+  "REJECTED",
+  "SUSPENDED",
+];
+const STAFF_ROLES = ["INVENTORY_STAFF", "ORDER_STAFF"];
+
+
 // shop đang hiển thị cho khách, bị khóa (SUSPENDED) hoặc đóng cửa (CLOSED) thì 404
 const findVisibleShop = async (shopId) => {
   assertObjectId(shopId, "shopId");
