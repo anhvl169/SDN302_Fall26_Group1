@@ -5,7 +5,7 @@ const shopRouter = express.Router();
 const {
     role,
 } = require("../../common/middlewares/role.js");
-const customerOnly = role("CUSTOMER");
+const customerOnly = role("CUSTOMER","ADMIN");
 const adminOnly = role("ADMIN");
 const ownerOnly = [role("SHOP_OWNER"), shopController.loadOwnedShopById];
 // Guest / Customer - UC28
