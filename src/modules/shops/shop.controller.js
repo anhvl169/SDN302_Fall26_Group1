@@ -1,4 +1,7 @@
+const mongoose = require("mongoose");
 const shopService = require("./shop.service.js");
+const Shop = require("./shop.model.js");
+const AppError = require("../../common/errors/AppError.js");
 const asyncHandler = require("../../common/utils/asyncHandler.js");
 const { success, paginated } = require("../../common/utils/response.js");
 

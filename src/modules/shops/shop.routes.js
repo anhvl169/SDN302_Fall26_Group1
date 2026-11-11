@@ -1,13 +1,18 @@
 const express = require("express");
 const shopController = require("./shop.controller.js");
+const { auth } = require("../../common/middlewares/auth.js");
 
 const shopRouter = express.Router();
 const {
     role,
 } = require("../../common/middlewares/role.js");
-const customerOnly = role("CUSTOMER","ADMIN");
-const adminOnly = role("ADMIN");
-const ownerOnly = [role("SHOP_OWNER"), shopController.loadOwnedShopById];
+const customerOnly = [auth, role("CUSTOMER", "ADMIN")];
+const adminOnly = [auth, role("ADMIN")];
+const ownerOnly = [
+    auth,
+    role("SHOP_OWNER"),
+    shopController.loadOwnedShopById,
+];
 // Guest / Customer - UC28
 shopRouter.get("/shops/:id", shopController.getShopPage);
 shopRouter.get("/shops/:id/categories", shopController.getShopCategories);
@@ -67,6 +72,13 @@ shopRouter.post(
     "/shops/:shopId/staff",
     ownerOnly,
     shopController.addShopStaff,
+);
+
+// UC18: Cập nhật nhiệm vụ nhân viên
+shopRouter.patch(
+    "/shops/:shopId/staff/:staffId",
+    ownerOnly,
+    shopController.updateShopStaff,
 );
 
 // UC18: Xóa nhân viên khỏi shop

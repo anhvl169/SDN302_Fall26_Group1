@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Shop = require("./shop.model.js");
 const AppError = require("../../common/errors/AppError.js");
 const { assertObjectId } = require("../../common/utils/query.js");
